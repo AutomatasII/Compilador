@@ -38,8 +38,10 @@ public void semantic(String msg, Object obj) {
 terminal COMA,PUNTOCOMA,DIAGONAL,DOSPUNTOS,OPEN,CLOSE,EQUALS;
 terminal DIFERENTE,MAYORIGUAL,MENORIGUAL,MENOSNUM,MENOSUNO;
 terminal MASNUM,MASUNO,MAYOR,MENOR,LLAVEIZQ,LLAVEDER,FOR;
-terminal INT,VOID,NUMERAL,PUNTO,PORCIENTO,CONIO,COMILLAS;
-terminal AMPERSAND,GETCH,SCANF,PRINTF,ELSE,IF,H,STDIO;
+terminal INT,VOID,NUMERAL,PUNTO,PORCIENTO,CSTRING,COMILLAS;
+terminal AMPERSAND,CIN,COUT,ELSE,IF,CMATH,CSTDIO,CSTDLIB;
+terminal EQUALS_EQUALS,MULNUM,IOSTREAM,INCLUDE,WHILE,CHAR;
+termianl STRING,DOUBLE,BOOLEAN,FLOAT,CORCHETEIZQ,CORCHETEDER;
 terminal FRASE;
 
 
@@ -64,7 +66,17 @@ INICIO ::=  FRASE:d
 
 SIMBOLO::=   COMA:d         {: RESULT =d.toString();:}        
 | EQUALS_EQUALS  {: RESULT =d.toString();;}
-|   {: RESULT =d.toString();:} 
+| MULNUM         {: RESULT =d.toString();:} 
+| IOSTREAM       {: RESULT =d.toString();:}
+| INCLUDE        {: RESULT =d.toString();:}
+| BOOLEAN        {: RESULT =d.toString();:}
+| FLOAT          {: RESULT =d.toString();:}
+| DOUBLE         {: RESULT =d.toString();:}
+| CSTRING        {: RESULT =d.toString();:}
+| CORCHETEIZQ    {: RESULT =d.toString();:}
+| CORCHETETEDER  {: RESULT =d.toString();:}
+| STRING         {: RESULT =d.toString();:}
+| CHAR           {: RESULT =d.toString();:}
 | PUNTOCOMA:d    {: RESULT =d.toString();:}
 | DIAGONAL:d     {: RESULT =d.toString();:}           
 | DOSPUNTOS:d    {: RESULT =d.toString();:}                   
@@ -92,13 +104,13 @@ SIMBOLO::=   COMA:d         {: RESULT =d.toString();:}
 | PORCIENTO:d    {: RESULT =d.toString();:}           
 | COMILLAS:d     {: RESULT =d.toString();:}           
 | AMPERSAND:d    {: RESULT =d.toString();:}           
-| GETCH:d        {: RESULT =d.toString();:}           
-| SCANF:d        {: RESULT =d.toString();:}           
-| PRINTF:d       {: RESULT =d.toString();:}           
+| EQUALS_EQUALS:d {: RESULT =d.toString();:}           
+| CIN:d          {: RESULT =d.toString();:}           
+| COUT:d         {: RESULT =d.toString();:}           
 | ELSE:d         {: RESULT =d.toString();:}           
 | IF:d           {: RESULT =d.toString();:}           
-| H:d            {: RESULT =d.toString();:}           
-| STDIO:d        {: RESULT =d.toString();:}           
-| CONIO:d        {: RESULT =d.toString();:}           
+| CMATH:d        {: RESULT =d.toString();:}           
+| CSTDIO:d       {: RESULT =d.toString();:}           
+| CSTDLIB:d      {: RESULT =d.toString();:}           
 ;
 /*********************Fin de la gramatica ********************/

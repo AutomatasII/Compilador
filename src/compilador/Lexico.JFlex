@@ -36,7 +36,7 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 
 [ \t\r\n\f] { /* ignore white space. */ }
 
-\' { /* ignore apostrofos. */ }
+\' { /* ignore apostrofos.  */ }
 
 <YYINITIAL> {WHITE_SPACE}  {/*no hace nada, aumenta una columna*/yychar++; }
 <YYINITIAL> {NEW_LINE}     {yychar=0; yyline=0}

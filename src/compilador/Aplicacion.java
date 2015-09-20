@@ -6,6 +6,7 @@
 package compilador;
 
 import java.io.File;
+import java_cup.anttask.CUPTask;
 
 /**
  *
@@ -120,6 +121,9 @@ public class Aplicacion extends javax.swing.JFrame {
             jflex.Main.generate(new File("src/compilador/Lexico.jflex"));
         } else {
             System.out.println("El archivo no existe");
+        }
+        if (new File("src/compilador/Sintactico-Semantico.cup").exists()){
+            
         }
 
         /* Create and display the form */

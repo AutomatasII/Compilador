@@ -83,9 +83,11 @@ public class Aplicacion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        if(new File("src/compilador/Lexico.jflex").exists())
+        if (new File("src/compilador/Lexico.jflex").exists()) {
             jflex.Main.generate(new File("src/compilador/Lexico.jflex"));
-        else System.out.println("El archivo no existe");
+        } else {
+            System.out.println("El archivo no existe");
+        }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
@@ -114,6 +116,11 @@ public class Aplicacion extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Aplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        if (new File("src/compilador/Lexico.jflex").exists()) {
+            jflex.Main.generate(new File("src/compilador/Lexico.jflex"));
+        } else {
+            System.out.println("El archivo no existe");
+        }
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -62,7 +62,9 @@ INICIO ::=  FRASE:d
 | SIMBOLO:d      
 {:interfaz.rotular("Se reconocio el token "+d.toString());:};
 
-SIMBOLO::=   COMA:d         {: RESULT =d.toString();:}           
+SIMBOLO::=   COMA:d         {: RESULT =d.toString();:}        
+| EQUALS_EQUALS  {: RESULT =d.toString();;}
+|   {: RESULT =d.toString();:} 
 | PUNTOCOMA:d    {: RESULT =d.toString();:}
 | DIAGONAL:d     {: RESULT =d.toString();:}           
 | DOSPUNTOS:d    {: RESULT =d.toString();:}                   

@@ -19,7 +19,7 @@ import java_cup.runtime.*;
 %}
 
 %eofval{
-{return new symbol(sym.EOF,null); }
+{return new Symbol(sym.EOF,null); }
 %eofval}
 
 LETRAS=[A-Za-z]
@@ -38,7 +38,7 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 [ \t\r\n\f] { /* ignore white space. */ }
 \' { /* ignore apostrofos. */ }
 <YYINITIAL> {WhiteSpace}  {/*no hace nada, aumenta una columna*/yychar++; }
-<YYINITIAL> {NewLine}     {yychar=0; yyline=0}
+<YYINITIAL> {NewLine}     {yychar=0; yyline=0;}
 /* COMPARACION, ASIGNACION, ARITMETICAS */
 <YYINITIAL>"=="     {return new Symbol(sym.EQUALS_EQUALS,    yyline, yychar, yytext());}
 <YYINITIAL>"!=>"    {return new Symbol(sym.DIFERENTE, yyline, yychar, yytext());}
@@ -47,7 +47,7 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 <YYINITIAL>"-="     {return new Symbol(sym.MENOSNUM,  yyline, yychar, yytext());}
 <YYINITIAL>"--"     {return new Symbol(sym.MENOSUNO,  yyline, yychar, yytext());}
 <YYINITIAL>"+="     {return new Symbol(sym.MASNUM,    yyline, yychar, yytext());}
-<YYINITIAL>"*="     {retunr new Symbol(sym.MULNUM, yyline, yychar, yytext()):}
+<YYINITIAL>"*="     {return new Symbol(sym.MULNUM, yyline, yychar, yytext());}
 <YYINITIAL>"++"     {return new Symbol(sym.MASUNO,    yyline, yychar, yytext());}
 <YYINITIAL>">"      {return new Symbol(sym.MAYOR,     yyline, yychar, yytext());}
 <YYINITIAL>"<"      {return new Symbol(sym.MENOR,     yyline, yychar, yytext());}
@@ -59,11 +59,11 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 <YYINITIAL>"%"      {return new Symbol(sym.PORCIENTO, yyline, yychar, yytext());}
 
  /* PALABRAS RESERVADAS */
-<YYINITIAL>"cmath" {return new Symbol(sym.CMATH, yyline, yychar, yytext()):}
-<YYINITIAL>"iostream" {return new Symbol(sym.IOSTREAM, yyline, yychar, yytext()):}
-<YYINITIAL>"cstring" {return new Symbol(sym.CSTRING, yyline, yychar, yytext()):}    
+<YYINITIAL>"cmath" {return new Symbol(sym.CMATH, yyline, yychar, yytext());}
+<YYINITIAL>"iostream" {return new Symbol(sym.IOSTREAM, yyline, yychar, yytext());}
+<YYINITIAL>"cstring" {return new Symbol(sym.CSTRING, yyline, yychar, yytext());}    
 <YYINITIAL>"cin"    {return new Symbol(sym.CIN,     yyline, yychar, yytext());}
-<YYINITIAL>"cout"   {return new Symbol(sym.COUNT,    yyline, yychar, yytext());}
+<YYINITIAL>"cout"   {return new Symbol(sym.COUT,    yyline, yychar, yytext());}
 <YYINITIAL>"if"     {return new Symbol(sym.IF,        yyline, yychar, yytext());}
 <YYINITIAL>"else"   {return new Symbol(sym.ELSE,      yyline, yychar, yytext());}
 <YYINITIAL>"for"    {return new Symbol(sym.FOR,       yyline, yychar, yytext());}
@@ -74,10 +74,10 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 <YYINITIAL>"char"   {return new Symbol(sym.CHAR,       yyline, yychar, yytext());}
 <YYINITIAL>"double" {return new Symbol(sym.DOUBLE,       yyline, yychar, yytext());}
 <YYINITIAL>"boolean" {return new Symbol(sym.BOOLEAN,       yyline, yychar, yytext());}
-<YYINITIAL>"float" (return new Symbol{sym.FLOAT, yyline, yychar, yytext()):}
-<YYINITIAL>"string" (return new Symbol{sym.STRING, yyline, yychar, yytext()):}
+<YYINITIAL>"float" {return new Symbol(sym.FLOAT, yyline, yychar, yytext());}
+<YYINITIAL>"string" {return new Symbol(sym.STRING, yyline, yychar, yytext());}
 <YYINITIAL>"void"   {return new Symbol(sym.VOID,      yyline, yychar, yytext());}
-<YYINITIAL>"include" {return new Symbol (sym.INCLUDE, yyline, yychar, yytext()):}
+<YYINITIAL>"include" {return new Symbol (sym.INCLUDE, yyline, yychar, yytext());}
 
 /* AGRUPADORES */
 <YYINITIAL>"("      {return new Symbol(sym.OPEN,      yyline, yychar, yytext());}

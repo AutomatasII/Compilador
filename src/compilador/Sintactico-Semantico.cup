@@ -1,4 +1,4 @@
-package proyecto1;
+package compilador;
 
 
 import java.io.*;
@@ -7,7 +7,6 @@ import java_cup.runtime.*;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java.util.*;
-import proyecto1.*;
 
 
 action code{:
@@ -41,7 +40,7 @@ terminal MASNUM,MASUNO,MAYOR,MENOR,LLAVEIZQ,LLAVEDER,FOR;
 terminal INT,VOID,NUMERAL,PUNTO,PORCIENTO,CSTRING,COMILLAS;
 terminal AMPERSAND,CIN,COUT,ELSE,IF,CMATH,CSTDIO,CSTDLIB;
 terminal EQUALS_EQUALS,MULNUM,IOSTREAM,INCLUDE,WHILE,CHAR;
-termianl STRING,DOUBLE,BOOLEAN,FLOAT,CORCHETEIZQ,CORCHETEDER;
+terminal STRING,DOUBLE,BOOLEAN,FLOAT,CORCHETEIZQ,CORCHETEDER;
 terminal FRASE;
 
 
@@ -65,18 +64,16 @@ INICIO ::=  FRASE:d
 {:interfaz.rotular("Se reconocio el token "+d.toString());:};
 
 SIMBOLO::=   COMA:d         {: RESULT =d.toString();:}        
-| EQUALS_EQUALS  {: RESULT =d.toString();;}
-| MULNUM         {: RESULT =d.toString();:} 
-| IOSTREAM       {: RESULT =d.toString();:}
-| INCLUDE        {: RESULT =d.toString();:}
-| BOOLEAN        {: RESULT =d.toString();:}
-| FLOAT          {: RESULT =d.toString();:}
-| DOUBLE         {: RESULT =d.toString();:}
-| CSTRING        {: RESULT =d.toString();:}
-| CORCHETEIZQ    {: RESULT =d.toString();:}
-| CORCHETETEDER  {: RESULT =d.toString();:}
-| STRING         {: RESULT =d.toString();:}
-| CHAR           {: RESULT =d.toString();:}
+| MULNUM:d         {: RESULT =d.toString();:} 
+| IOSTREAM:d       {: RESULT =d.toString();:}
+| INCLUDE:d        {: RESULT =d.toString();:}
+| BOOLEAN:d        {: RESULT =d.toString();:}
+| FLOAT:d          {: RESULT =d.toString();:}
+| DOUBLE:d         {: RESULT =d.toString();:}
+| CSTRING:d        {: RESULT =d.toString();:}
+| CORCHETEIZQ:d    {: RESULT =d.toString();:}
+| CORCHETEDER:d  {: RESULT =d.toString();:}
+| CHAR:d           {: RESULT =d.toString();:}
 | PUNTOCOMA:d    {: RESULT =d.toString();:}
 | DIAGONAL:d     {: RESULT =d.toString();:}           
 | DOSPUNTOS:d    {: RESULT =d.toString();:}                   

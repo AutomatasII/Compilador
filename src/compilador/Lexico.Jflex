@@ -40,14 +40,14 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 <YYINITIAL> {WhiteSpace}  {/*no hace nada, aumenta una columna*/yychar++; }
 <YYINITIAL> {NewLine}     {yychar=0; yyline=0}
 /* COMPARACION, ASIGNACION, ARITMETICAS */
-<YYINITIAL>"=="      {return new Symbol(sym.EQUALS_EQUALS,    yyline, yychar, yytext());}
+<YYINITIAL>"=="     {return new Symbol(sym.EQUALS_EQUALS,    yyline, yychar, yytext());}
 <YYINITIAL>"!=>"    {return new Symbol(sym.DIFERENTE, yyline, yychar, yytext());}
 <YYINITIAL>">="     {return new Symbol(sym.MAYORIGUAL,yyline, yychar, yytext());}
 <YYINITIAL>"<="     {return new Symbol(sym.MENORIGUAL,yyline, yychar, yytext());}
 <YYINITIAL>"-="     {return new Symbol(sym.MENOSNUM,  yyline, yychar, yytext());}
 <YYINITIAL>"--"     {return new Symbol(sym.MENOSUNO,  yyline, yychar, yytext());}
 <YYINITIAL>"+="     {return new Symbol(sym.MASNUM,    yyline, yychar, yytext());}
-<YYINITIAL>"*="     {sym., yyline, yychar, yytext()):}
+<YYINITIAL>"*="     {retunr new Symbol(sym.MULNUM, yyline, yychar, yytext()):}
 <YYINITIAL>"++"     {return new Symbol(sym.MASUNO,    yyline, yychar, yytext());}
 <YYINITIAL>">"      {return new Symbol(sym.MAYOR,     yyline, yychar, yytext());}
 <YYINITIAL>"<"      {return new Symbol(sym.MENOR,     yyline, yychar, yytext());}
@@ -59,9 +59,9 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 <YYINITIAL>"%"      {return new Symbol(sym.PORCIENTO, yyline, yychar, yytext());}
 
  /* PALABRAS RESERVADAS */
-<YYINITIAL>"cmath" {sym., yyline, yychar, yytext()):}
-<YYINITIAL>"iostream" {sym., yyline, yychar, yytext()):}
-<YYINITIAL>"cstring" {sym., yyline, yychar, yytext()):}    
+<YYINITIAL>"cmath" {sym.CMATH, yyline, yychar, yytext()):}
+<YYINITIAL>"iostream" {sym.IOSTREAM, yyline, yychar, yytext()):}
+<YYINITIAL>"cstring" {sym.CSTRING, yyline, yychar, yytext()):}    
 <YYINITIAL>"cin"    {return new Symbol(sym.CIN,     yyline, yychar, yytext());}
 <YYINITIAL>"cout"   {return new Symbol(sym.COUNT,    yyline, yychar, yytext());}
 <YYINITIAL>"if"     {return new Symbol(sym.IF,        yyline, yychar, yytext());}
@@ -74,10 +74,10 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 <YYINITIAL>"char"   {return new Symbol(sym.CHAR,       yyline, yychar, yytext());}
 <YYINITIAL>"double" {return new Symbol(sym.DOUBLE,       yyline, yychar, yytext());}
 <YYINITIAL>"boolean" {return new Symbol(sym.BOOLEAN,       yyline, yychar, yytext());}
-<YYINITIAL>"float" {sym., yyline, yychar, yytext()):}
-<YYINITIAL>"string" {sym., yyline, yychar, yytext()):}
+<YYINITIAL>"float" {sym.FLOAT, yyline, yychar, yytext()):}
+<YYINITIAL>"string" {sym.STRING, yyline, yychar, yytext()):}
 <YYINITIAL>"void"   {return new Symbol(sym.VOID,      yyline, yychar, yytext());}
-<YYINITIAL>"include" {sym., yyline, yychar, yytext()):}
+<YYINITIAL>"include" {return new Symbol (sym.INCLUDE, yyline, yychar, yytext()):}
 
 /* AGRUPADORES */
 <YYINITIAL>"("      {return new Symbol(sym.OPEN,      yyline, yychar, yytext());}

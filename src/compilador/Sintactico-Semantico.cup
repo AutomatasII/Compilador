@@ -22,8 +22,8 @@ System.out.println("va a ingresar el error sintactico "+ cur_token.value);
 interfaz.rotular  ("va a ingresar el error sintactico "+ cur_token.value);
 }
 public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-interfaz.rotular("error YA no se recupera");
-System.out.println("error YA no se recupera");
+interfaz.rotular("Imposible recuperarse del error");
+System.out.println("Imposible recuperarse del error");
 }
 public void semantic(Symbol cur_token,String n)
 {

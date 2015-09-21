@@ -35,20 +35,22 @@ parser code {:
 
 /*TERMINALES  */
 
-terminal COMA,PUNTOCOMA,DIAGONAL,DOSPUNTOS,OPEN,CLOSE,EQUALS;
+terminal PUNTOCOMA,OPEN,CLOSE,EQUALS;
 terminal DIFERENTE,MAYORIGUAL,MENORIGUAL,MENOSNUM,MENOSUNO;
-terminal MASNUM,MASUNO,MAYOR,MENOR,LLAVEIZQ,LLAVEDER,FOR;
-terminal INT,VOID,NUMERAL,PUNTO,PORCIENTO,CSTRING,COMILLAS;
-terminal AMPERSAND,CIN,COUT,ELSE,IF,CMATH,CSTDIO,CSTDLIB;
-terminal EQUALS_EQUALS,MULNUM,IOSTREAM,INCLUDE,WHILE,CHAR;
-terminal STRING,DOUBLE,BOOLEAN,FLOAT,CORCHETEIZQ,CORCHETEDER;
-terminal FRASE;
+terminal MASNUM,MASUNO,MAYOR,MENOR,LLAVEIZQ,LLAVEDER,FOR,IF,ELSE;
+terminal INT,MAIN,IDENTIFICADOR,ENTERO,DECIMAL,STRING_LITERAL,BOOLEANO;
+terminal EQUALS_EQUALS,WHILE,CHAR,SUMA,RESTA,DIVISION,MULTIPLICACION;
+terminal STRING,DOUBLE,BOOLEAN;
+
 
 
 /*SIMBOLOS NO TERMINALES*/ 
 
 non terminal START, INICIO;
-non terminal String SIMBOLO;
+non terminal codigo, lineas, linea, iniciar_variables, tipo_variable, asignar, valor;
+non terminal operacion_asignacion, aritmetica, operacion, inc_dec_variable, inc_dec, tipo_operacion;
+non terminal cambiar_valor, conjunto_asignacion, ciclos, ciclo_if, si, no;
+non terminal condicion, condicional, ciclo_for, inicio_for, ciclo_while;
 
 start with START;
 
@@ -56,59 +58,30 @@ start with START;
 ******************************************************/
 
 
-START  ::=   START INICIO            |
-		 INICIO;
-
-INICIO ::=  FRASE:d         
-{://interfaz.rotular("Se reconocio una frase alfanumerica : "+ d.toString());:}           
-| SIMBOLO:d      
-{://interfaz.rotular("Se reconocio el token "+d.toString());:};
-
-SIMBOLO::=   COMA:d         {: RESULT =d.toString();:}        
-| MULNUM:d         {: RESULT =d.toString();:} 
-| IOSTREAM:d       {: RESULT =d.toString();:}
-| INCLUDE:d        {: RESULT =d.toString();:}
-| BOOLEAN:d        {: RESULT =d.toString();:}
-| FLOAT:d          {: RESULT =d.toString();:}
-| DOUBLE:d         {: RESULT =d.toString();:}
-| CSTRING:d        {: RESULT =d.toString();:}
-| CORCHETEIZQ:d    {: RESULT =d.toString();:}
-| CORCHETEDER:d  {: RESULT =d.toString();:}
-| CHAR:d           {: RESULT =d.toString();:}
-| PUNTOCOMA:d    {: RESULT =d.toString();:}
-| DIAGONAL:d     {: RESULT =d.toString();:}           
-| DOSPUNTOS:d    {: RESULT =d.toString();:}                   
-| EQUALS:d       {: RESULT =d.toString();:}          
-| OPEN:d         {: RESULT =d.toString();:}           
-| CLOSE:d        {: RESULT =d.toString();:}           
-| DIFERENTE:d    {: RESULT =d.toString();:}           
-| MAYORIGUAL:d   {: RESULT =d.toString();:}           
-| MENORIGUAL:d   {: RESULT =d.toString();:}           
-| MENOSNUM:d     {: RESULT =d.toString();:}           
-| MENOSUNO:d     {: RESULT =d.toString();:}           
-| MASNUM:d       {: RESULT =d.toString();:}           
-| MAYOR:d        {: RESULT =d.toString();:}           
-| MENOR:d        {: RESULT =d.toString();:}                      
-| LLAVEIZQ:d     {: RESULT =d.toString();:}           
-| LLAVEDER:d     {: RESULT =d.toString();:}           
-| MASUNO:d       {: RESULT =d.toString();:}           
-| FOR:d          {: RESULT =d.toString();:}   
-| WHILE:d        {: RESULT =d.toString();:}
-| STRING:d       {: RESULT =d.toString();:}       
-| INT:d          {: RESULT =d.toString();:}           
-| VOID:d         {: RESULT =d.toString();:}           
-| NUMERAL:d      {: RESULT =d.toString();:}           
-| PUNTO:d        {: RESULT =d.toString();:}           
-| PORCIENTO:d    {: RESULT =d.toString();:}           
-| COMILLAS:d     {: RESULT =d.toString();:}           
-| AMPERSAND:d    {: RESULT =d.toString();:}           
-| EQUALS_EQUALS:d {: RESULT =d.toString();:}           
-| CIN:d          {: RESULT =d.toString();:}           
-| COUT:d         {: RESULT =d.toString();:}           
-| ELSE:d         {: RESULT =d.toString();:}           
-| IF:d           {: RESULT =d.toString();:}           
-| CMATH:d        {: RESULT =d.toString();:}           
-| CSTDIO:d       {: RESULT =d.toString();:}           
-| CSTDLIB:d      {: RESULT =d.toString();:}           
-;
+START  ::=   INICIO;
+INICIO ::= INT MAIN OPEN INT CLOSE OPEN codigo CLOSE ;
+codigo ::= lineas | /*Empty*/;
+lineas ::= lineas linea | linea;
+linea ::= iniciar_variables PUNTOCOMA | cambiar_valor | ciclos;
+iniciar_variables ::= tipo_variable IDENTIFICADOR | tipo_variable IDENTIFICADOR asignar;
+tipo_variable ::= INT | CHAR | STRING | DOUBLE | BOOLEAN;
+asignar ::= EQUALS operacion_asignacion | EQUALS valor | EQUALS IDENTIFICADOR;
+valor ::= ENTERO | DECIMAL | BOOLEANO | STRING_LITERAL;
+operacion_asignacion ::= aritmetica | inc_dec_variable;
+aritmetica ::= operacion;
+operacion ::= valor tipo_operacion valor | valor tipo_operacion IDENTIFICADOR | IDENTIFICADOR tipo_operacion valor | IDENTIFICADOR tipo_operacion IDENTIFICADOR;
+tipo_operacion ::= SUMA | RESTA | DIVISION | MULTIPLICACION;
+inc_dec_variable ::= IDENTIFICADOR inc_dec;
+inc_dec ::= MASUNO | MENOSUNO;
+cambiar_valor ::= IDENTIFICADOR EQUALS conjunto_asignacion;
+conjunto_asignacion ::= valor | operacion_asignacion | IDENTIFICADOR;
+ciclos ::= ciclo_if | ciclo_for | ciclo_while;
+ciclo_if ::= si | si no ;
+si ::= IF OPEN condicion CLOSE LLAVEIZQ codigo LLAVEDER;
+condicion ::= valor condicional valor | valor condicional IDENTIFICADOR | IDENTIFICADOR condicional valor | IDENTIFICADOR condicional IDENTIFICADOR;
+condicional ::= EQUALS_EQUALS | MAYOR | MENOR | MENORIGUAL | MAYORIGUAL | DIFERENTE;
+no ::= ELSE LLAVEIZQ codigo LLAVEDER;
+ciclo_for ::= FOR OPEN inicio_for PUNTOCOMA condicion PUNTOCOMA inc_dec_variable CLOSE LLAVEIZQ codigo LLAVEDER ;
+inicio_for ::= tipo_variable IDENTIFICADOR asignar | IDENTIFICADOR asignar;
+ciclo_while ::= WHILE LLAVEIZQ condicion LLAVEDER LLAVEIZQ codigo LLAVEDER;
 /*********************Fin de la gramatica ********************/

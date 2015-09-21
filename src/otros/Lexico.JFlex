@@ -21,24 +21,43 @@ import java_cup.runtime.*;
 {return new Symbol(sym.EOF,null); }
 %eofval}
 
-LETRAS=[A-Za-z]
-DIGITOS=[0-9]
-DIGITO_LETRAS={LETRAS}|{DIGITOS}
-
+Caracter = [A-Za-z]
+Digito = [0-9]
+Alfa = {Caracter} | {Digito}
+Entero = 0 | [1-9][0-9]*
+Decimal = {Digito}+"."{Entero}
+Identificador = ({Caracter}{Entero})*
+Booleano = true | false
+%state STRING
 NewLine = \n\r
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 WhiteSpace = {LineTerminator} | [ \t\f]
 st = [^\\\n\"]+ | [\\][\\] | "\\\"" | "\\\'" |"\\t"| "\\n" | "\\r" |"\\b" |"\n" 
-FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
-
 %%
+
+
+
+
+
 [\n] { yychar=0;}
 [ \t\r\n\f] { /* ignore white space. */ }
 \' { /* ignore apostrofos. */ }
 <YYINITIAL> {WhiteSpace}  {/*no hace nada, aumenta una columna*/yychar++; }
 <YYINITIAL> {NewLine}     {yychar=0; yyline=0;}
+
+/* Identificadores y numeros */
+<YYINITIAL> {Entero} {return new Symbol (sym.ENTERO, yyline, yychar, yytext());}
+<YYINITIAL> {Decimal} {return new Symbol (sym.DECIMAL, yyline, yychar, yytext());}
+<YYINITIAL> {Identificador} {return new Symbol (sym.IDENTIFICADOR, yyline, yychar, yytext());}
+<YYINITIAL> {Booleano} {return new Symbol (sym.BOOLEANO, yyline, yychar, yytext());}
+\" { string.setLength(0); yybegin(STRING); }
+
 /* COMPARACION, ASIGNACION, ARITMETICAS */
+<YYINITIAL>"+"      {return new Symbol (sym.SUMA, yyline, yychar, yytext());}
+<YYINITIAL>"-"      {return new Symbol (sym.RESTA, yyline, yychar, yytext());}
+<YYINITIAL>"*"      {return new Symbol (sym.MULTIPLICACION, yyline, yychar, yytext());}
+<YYINITIAL>"/"      {return new Symbol (sym.DIVISION, yyline, yychar, yytext());}
 <YYINITIAL>"=="     {return new Symbol(sym.EQUALS_EQUALS,    yyline, yychar, yytext());}
 <YYINITIAL>"!=>"    {return new Symbol(sym.DIFERENTE, yyline, yychar, yytext());}
 <YYINITIAL>">="     {return new Symbol(sym.MAYORIGUAL,yyline, yychar, yytext());}
@@ -58,7 +77,8 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 <YYINITIAL>"%"      {return new Symbol(sym.PORCIENTO, yyline, yychar, yytext());}
 
  /* PALABRAS RESERVADAS */
-<YYINITIAL>"cmath" {return new Symbol(sym.CMATH, yyline, yychar, yytext());}
+<YYINITIAL>"main" {return new Symbol(sym.MAIN, yyline, yychar, yytext());}
+<YYINITIAL>"cmath" {return new Symbol(sym.CMATH, yyline, yychar,yytext() );}
 <YYINITIAL>"iostream" {return new Symbol(sym.IOSTREAM, yyline, yychar, yytext());}
 <YYINITIAL>"cstring" {return new Symbol(sym.CSTRING, yyline, yychar, yytext());}    
 <YYINITIAL>"cin"    {return new Symbol(sym.CIN,     yyline, yychar, yytext());}
@@ -90,12 +110,18 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 <YYINITIAL>";"      {return new Symbol(sym.PUNTOCOMA, yyline, yychar, yytext());}
 <YYINITIAL>":"      {return new Symbol(sym.DOSPUNTOS, yyline, yychar, yytext());}
 <YYINITIAL>"."      {return new Symbol(sym.PUNTO,     yyline, yychar, yytext());}
-<YYINITIAL>","      {return new Symbol(sym.COMA,      yyline, yychar, yytext());}
-<YYINITIAL>"/"      {return new Symbol(sym.DIAGONAL,  yyline, yychar, yytext());}
-<YYINITIAL>"\""     {return new Symbol(sym.COMILLAS,  yyline, yychar, yytext());} 
+<YYINITIAL>","      {return new Symbol(sym.COMA,      yyline, yychar, yytext()  );}
 
-/* COMPARACION */
+<STRING>{
+\" { yybegin(YYINITIAL);
+return new Symbol(sym.STRING_LITERAL,
+string.toString()); }
+/*[^\n\r\"\\]+ { string.append( yytext() ); }
+\\t { string.append(’\t’); }
+\\n { string.append(’\n’); }
 
-
-<YYINITIAL>{FRASE}  {return new Symbol(sym.FRASE,     yyline, yychar, yytext());}
-. {errores += "error lexico en la fila "+yyline +" y en la columna " + yycolumn + "\n";}
+\\r { string.append(’\r’); }
+\\\" { string.append(’\\"’); }
+\\ { string.append(’\\’); }*/
+}
+. {errores += "error lexico en la fila "+yyline +" y en la columna " + yychar + "\n";}

@@ -6,7 +6,18 @@
 package compilador;
 
 import java.io.File;
-import java_cup.anttask.CUPTask;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -18,6 +29,10 @@ public class Aplicacion extends javax.swing.JFrame {
      * Creates new form Aplicacion
      */
     public Aplicacion() {
+        ruta = "";
+        texto_original = "";
+        texto_modificado = "";
+        compilarFlexCup();
         initComponents();
     }
 
@@ -30,40 +45,79 @@ public class Aplicacion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        texto = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        salida = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        compilar = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        abrir = new javax.swing.JMenuItem();
+        guardar = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        compilaFlexCup = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        texto.setColumns(20);
+        texto.setRows(5);
+        texto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textoKeyTyped(evt);
+            }
+        });
+        jScrollPane1.setViewportView(texto);
+
+        jLabel1.setText("Entrada");
+
+        salida.setEditable(false);
+        salida.setColumns(20);
+        salida.setRows(5);
+        jScrollPane2.setViewportView(salida);
+
+        jLabel2.setText("Salida");
+
+        compilar.setText("Compilar");
+        compilar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                compilarActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("Archivo");
 
-        jMenuItem1.setText("Abrir");
-        jMenu1.add(jMenuItem1);
+        abrir.setText("Abrir");
+        abrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirActionPerformed(evt);
+            }
+        });
+        jMenu1.add(abrir);
 
-        jMenuItem3.setText("Guardar");
-        jMenu1.add(jMenuItem3);
+        guardar.setText("Guardar");
+        guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(guardar);
         jMenu1.add(jSeparator1);
-
-        jMenuItem2.setText("Salir");
-        jMenu1.add(jMenuItem2);
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Compilar");
+        jMenu2.setText("Herramientas");
 
-        jMenuItem4.setText("Compilar Flex - Cup");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        compilaFlexCup.setText("Compilar Flex - Cup");
+        compilaFlexCup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                compilaFlexCupActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem4);
+        jMenu2.add(compilaFlexCup);
 
         jMenuBar1.add(jMenu2);
 
@@ -73,23 +127,189 @@ public class Aplicacion extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 802, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(compilar)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(compilar)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        if (new File("src/compilador/Lexico.jflex").exists()) {
-            jflex.Main.generate(new File("src/compilador/Lexico.jflex"));
+    public void compilarFlexCup() {
+        if (new File("src/otros/Lexico.jflex").exists()) {
+            jflex.Main.generate(new File("src/otros/Lexico.jflex"));
+            moverArch("src/otros/Lexer.java");
         } else {
-            System.out.println("El archivo no existe");
+            System.out.println("El archivo .jflex no existe");
         }
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+        if (new File("src/otros/Sintactico-Semantico.cup").exists()) {
+            String analisis_sinta[] = {"-parser", "parser", "src/otros/Sintactico-Semantico.cup"};
+
+            try {
+                java_cup.Main.main(analisis_sinta);
+            } catch (IOException ex) {
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            moverArch("parser.java");
+            moverArch("sym.java");
+        } else {
+            System.out.println("El archivo .cup no existe");
+        }
+    }
+
+    private void compilaFlexCupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compilaFlexCupActionPerformed
+        compilarFlexCup();
+    }//GEN-LAST:event_compilaFlexCupActionPerformed
+
+    public boolean moverArch(String archNombre) {
+        boolean efectuado = false;
+        File arch = new File(archNombre);
+        if (arch.exists()) {
+            System.out.println("\n*** Moviendo " + arch + " \n***");
+            Path currentRelativePath = Paths.get("");
+            String nuevoDir = currentRelativePath.toAbsolutePath().toString()
+                    + File.separator + "src" + File.separator
+                    + "compilador" + File.separator + arch.getName();
+            File archViejo = new File(nuevoDir);
+            archViejo.delete();
+            if (arch.renameTo(new File(nuevoDir))) {
+                System.out.println("\n*** Generado " + archNombre + "***\n");
+                efectuado = true;
+            } else {
+                System.out.println("\n*** No movido " + archNombre + " ***\n");
+            }
+
+        } else {
+            System.out.println("\n*** Codigo no existente ***\n");
+        }
+        return efectuado;
+    }
+
+    private void abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirActionPerformed
+        JFileChooser chooser = new JFileChooser();
+
+        int op = chooser.showOpenDialog(null);
+        if (op == JFileChooser.APPROVE_OPTION) {
+            ruta = chooser.getSelectedFile().getAbsolutePath();
+            ExtractorTexto extraer = new ExtractorTexto(ruta);
+            try {
+                extraer.sacaTexto();
+            } catch (IOException ex) {
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            for (String i : extraer.getLista()) {
+                texto.append(i + "\n");
+            }
+            texto_original = texto.getText();
+        }
+    }//GEN-LAST:event_abrirActionPerformed
+
+    public void guardarTexto(String text) throws FileNotFoundException {
+        JFileChooser chooser = new JFileChooser();
+        PrintWriter pw = null;
+        File archivo = null;
+        int op = chooser.showSaveDialog(null);
+        if (op == JFileChooser.APPROVE_OPTION) {
+            archivo = new File(chooser.getSelectedFile().getAbsolutePath() + ".cpp");
+            try {
+                pw = new PrintWriter(archivo);
+                pw.append(text);
+            } finally {
+                pw.close();
+            }
+        }
+        ruta = archivo.getAbsolutePath();
+    }
+
+    private void compilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compilarActionPerformed
+        if (!ruta.equals("")) {
+            try {
+                lexico = new Lexer(new FileReader(new File(ruta)));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            sintactico_semantico = new parser(lexico);
+            try {
+                sintactico_semantico.parse();
+            } catch (Exception ex) {
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (!lexico.errores.equals("")) {
+                salida.append(lexico.errores);
+            } else {
+                salida.append("Analisis lexico realizado con exito!\n");
+            }
+        } else if (ruta.equals("") && !texto.getText().equals("")) {
+            int op = JOptionPane.showConfirmDialog(this, "Primero debe guardar el texto en un archivo, ¿desea guardar?");
+            if (op == JOptionPane.OK_OPTION) {
+                try {
+                    guardarTexto(texto.getText());
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    lexico = new Lexer(new FileReader(new File(ruta)));
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                sintactico_semantico = new parser(lexico);
+                try {
+                    sintactico_semantico.parse();
+                } catch (Exception ex) {
+                    Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if (!lexico.errores.equals("")) {
+                    salida.append(lexico.errores);
+                } else {
+                    salida.append("Analisis lexico realizado con exito!\n");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No ha seleccionado un archivo fuente");
+        }
+    }//GEN-LAST:event_compilarActionPerformed
+
+    private void textoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textoKeyTyped
+        texto_modificado = texto.getText();
+    }//GEN-LAST:event_textoKeyTyped
+
+    private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
+        try {
+            guardarTexto(texto.getText());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_guardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,31 +337,44 @@ public class Aplicacion extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Aplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        if (new File("src/compilador/Lexico.jflex").exists()) {
-            jflex.Main.generate(new File("src/compilador/Lexico.jflex"));
-        } else {
-            System.out.println("El archivo no existe");
-        }
-        if (new File("src/compilador/Sintactico-Semantico.cup").exists()){
-            
-        }
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 new Aplicacion().setVisible(true);
             }
         });
     }
-
+    private String ruta, texto_original, texto_modificado;
+    private Lexer lexico;
+    private parser sintactico_semantico;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem abrir;
+    private javax.swing.JMenuItem compilaFlexCup;
+    private javax.swing.JButton compilar;
+    private javax.swing.JMenuItem guardar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextArea salida;
+    private javax.swing.JTextArea texto;
     // End of variables declaration//GEN-END:variables
 }

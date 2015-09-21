@@ -10,26 +10,27 @@ import java.util.*;
 
 
 action code{:
-void print(String msj)
-{
-System.out.println(msj);}
-:}
+    String error_sintactico = "";
+    String error_unrecovered = "";
+    String error_semantico = "";
+    void print(String msj){
+        System.out.println(msj);
+    }
+:};
 
 parser code {:
-public void syntax_error(Symbol cur_token){
-System.out.println("va a ingresar el error sintactico "+ cur_token.value);
-interfaz.rotular  ("va a ingresar el error sintactico "+ cur_token.value);
-}
-public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-interfaz.rotular("Imposible recuperarse del error");
-System.out.println("Imposible recuperarse del error");
-}
-public void semantic(Symbol cur_token,String n)
-{
-System.out.println("error semantico ");  
-}
-public void semantic(String msg, Object obj) {
-}
+    /*public void syntax_error(Symbol cur_token){
+        error_sintactico += "Error sintactico "+ cur_token.value + "\n";
+    }
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{        
+        error_unrecovered += "Imposible recuperarse del error\n";
+    }
+    public void semantic(Symbol cur_token,String n) {
+        error_semantico += "Error semantico en el token: " + cur_token.value + " " + n + "\n"; 
+    }
+    public void semantic(String msg, Object obj) {
+        error_semantico += "Error semantico: " + msg + " : " + obj + "\n";
+    }*/
 :};
 
 /*TERMINALES  */
@@ -59,9 +60,9 @@ START  ::=   START INICIO            |
 		 INICIO;
 
 INICIO ::=  FRASE:d         
-{:interfaz.rotular("Se reconocio una frase alfanumerica : "+ d.toString());:}           
+{://interfaz.rotular("Se reconocio una frase alfanumerica : "+ d.toString());:}           
 | SIMBOLO:d      
-{:interfaz.rotular("Se reconocio el token "+d.toString());:};
+{://interfaz.rotular("Se reconocio el token "+d.toString());:};
 
 SIMBOLO::=   COMA:d         {: RESULT =d.toString();:}        
 | MULNUM:d         {: RESULT =d.toString();:} 

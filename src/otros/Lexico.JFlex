@@ -15,7 +15,6 @@ import java_cup.runtime.*;
 %{
       StringBuffer string = new StringBuffer();
       String errores = "";
-      
 %}
 
 %eofval{
@@ -99,4 +98,4 @@ FRASE=("_"|{DIGITO_LETRAS})("_"|{DIGITO_LETRAS})*
 
 
 <YYINITIAL>{FRASE}  {return new Symbol(sym.FRASE,     yyline, yychar, yytext());}
-. {errores += "error lexico en la fila "+yyline +" y en la columna " + yychar + "\n";}
+. {errores += "error lexico en la fila "+yyline +" y en la columna " + yycolumn + "\n";}

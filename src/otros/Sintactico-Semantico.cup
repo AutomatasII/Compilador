@@ -10,16 +10,17 @@ import java.util.*;
 
 
 action code{:
+    
+:};
+
+parser code {:
     String error_sintactico = "";
     String error_unrecovered = "";
     String error_semantico = "";
     void print(String msj){
         System.out.println(msj);
     }
-:};
-
-parser code {:
-    /*public void syntax_error(Symbol cur_token){
+    public void syntax_error(Symbol cur_token){
         error_sintactico += "Error sintactico "+ cur_token.value + "\n";
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{        
@@ -30,24 +31,25 @@ parser code {:
     }
     public void semantic(String msg, Object obj) {
         error_semantico += "Error semantico: " + msg + " : " + obj + "\n";
-    }*/
+    }
 :};
 
 /*TERMINALES  */
 
-terminal PUNTOCOMA,OPEN,CLOSE,EQUALS;
+terminal PUNTOCOMA,OPEN,CLOSE,EQUALS,GATO;
 terminal DIFERENTE,MAYORIGUAL,MENORIGUAL,MENOSNUM,MENOSUNO;
 terminal MASNUM,MASUNO,MAYOR,MENOR,LLAVEIZQ,LLAVEDER,FOR,IF,ELSE;
 terminal INT,MAIN,IDENTIFICADOR,ENTERO,DECIMAL,STRING_LITERAL,BOOLEANO;
 terminal EQUALS_EQUALS,WHILE,CHAR,SUMA,RESTA,DIVISION,MULTIPLICACION;
 terminal STRING,DOUBLE,BOOLEAN;
-
+terminal CIN,COUT,FLOAT,CMATH,CSTDIO,INCLUDE,CSTRING,CSTDLIB,IOSTREAM;
 
 
 /*SIMBOLOS NO TERMINALES*/ 
 
-non terminal START, INICIO;
-non terminal codigo, lineas, linea, iniciar_variables, tipo_variable, asignar, valor;
+non terminal START, INICIO, programa;
+non terminal codigo, lineas, linea, declaracion_libreria, libreria, funcion_main;
+non terminal iniciar_variables, tipo_variable, asignar, valor;
 non terminal operacion_asignacion, aritmetica, operacion, inc_dec_variable, inc_dec, tipo_operacion;
 non terminal cambiar_valor, conjunto_asignacion, ciclos, ciclo_if, si, no;
 non terminal condicion, condicional, ciclo_for, inicio_for, ciclo_while;
@@ -56,13 +58,16 @@ start with START;
 
 /***********inicio de la gramatica *******************
 ******************************************************/
-
-
-START  ::=   INICIO;
-INICIO ::= INT MAIN OPEN INT CLOSE OPEN codigo CLOSE ;
+ 
+START  ::= INICIO;
+INICIO ::= programa;
+programa ::= codigo;
 codigo ::= lineas | /*Empty*/;
 lineas ::= lineas linea | linea;
-linea ::= iniciar_variables PUNTOCOMA | cambiar_valor | ciclos;
+linea ::= iniciar_variables PUNTOCOMA | cambiar_valor | ciclos | declaracion_libreria | funcion_main;
+declaracion_libreria ::= GATO INCLUDE MENOR libreria MAYOR ;
+libreria ::= CMATH | CSTDIO | CSTRING | CSTDLIB | IOSTREAM ;
+funcion_main ::=   INT MAIN OPEN CLOSE LLAVEIZQ codigo LLAVEDER ; 
 iniciar_variables ::= tipo_variable IDENTIFICADOR | tipo_variable IDENTIFICADOR asignar;
 tipo_variable ::= INT | CHAR | STRING | DOUBLE | BOOLEAN;
 asignar ::= EQUALS operacion_asignacion | EQUALS valor | EQUALS IDENTIFICADOR;

@@ -227,6 +227,7 @@ public class Aplicacion extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
             }
+            texto.setText("");
             for (String i : extraer.getLista()) {
                 texto.append(i + "\n");
             }
@@ -252,6 +253,7 @@ public class Aplicacion extends javax.swing.JFrame {
     }
 
     private void compilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compilarActionPerformed
+        salida.setText("");
         if (!ruta.equals("")) {
             try {
                 lexico = new Lexer(new FileReader(new File(ruta)));
@@ -264,11 +266,12 @@ public class Aplicacion extends javax.swing.JFrame {
             } catch (Exception ex) {
                 Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (!lexico.errores.equals("")) {
-                salida.append(lexico.errores);
-            } else {
-                salida.append("Analisis lexico realizado con exito!\n");
-            }
+
+            salida.append(lexico.errores);
+            salida.append(sintactico_semantico.error_sintactico);
+            salida.append(sintactico_semantico.error_semantico);
+            salida.append(sintactico_semantico.error_unrecovered);
+
         } else if (ruta.equals("") && !texto.getText().equals("")) {
             int op = JOptionPane.showConfirmDialog(this, "Primero debe guardar el texto en un archivo, ¿desea guardar?");
             if (op == JOptionPane.OK_OPTION) {
@@ -288,11 +291,13 @@ public class Aplicacion extends javax.swing.JFrame {
                 } catch (Exception ex) {
                     Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if (!lexico.errores.equals("")) {
-                    salida.append(lexico.errores);
-                } else {
-                    salida.append("Analisis lexico realizado con exito!\n");
-                }
+
+                salida.append(lexico.errores);
+
+                salida.append(sintactico_semantico.error_sintactico);
+                salida.append(sintactico_semantico.error_semantico);
+                salida.append(sintactico_semantico.error_unrecovered);
+
             }
         } else {
             JOptionPane.showMessageDialog(this, "No ha seleccionado un archivo fuente");
